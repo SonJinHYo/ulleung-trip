@@ -72,6 +72,9 @@ h2:first-child { margin-top: 0; }
 .info li { margin: 4px 0; font-size: 14px; }
 .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); margin-left: 4px; vertical-align: 1px; }
 
+.jumps { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.jumps a { font-size: 13px; font-weight: 700; text-decoration: none; color: var(--brand); background: var(--brand-soft); padding: 6px 10px; border-radius: 8px; }
+
 /* places */
 .filters { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 6px; margin-bottom: 8px; scrollbar-width: none; }
 .filters::-webkit-scrollbar { display: none; }
@@ -126,7 +129,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; padding: 10px
 <div class="top">
   <header>
     <h1>울릉도 여행 안내</h1>
-    <div class="sub">11월 5일(목) ~ 7일(토) · 숙소 다온프라임호텔 (저동)</div>
+    <div class="sub">11월 5일(목) ~ 7일(토) · 숙소 다온프라임호텔 (저동) · 체크인 15:00 / 체크아웃 10:00</div>
   </header>
   <nav class="tabs" role="tablist">
     <button class="active" data-t="d1">5일</button>
@@ -160,13 +163,14 @@ footer { font-size: 12px; color: var(--muted); text-align: center; padding: 10px
   <p class="day-sub">독도 · 울릉도 자유 일정</p>
   <ol class="tl">
     <li><span class="time">06:00</span><div><div class="what">사동항 도착</div></div></li>
-    <li><span class="time">06:30</span><div><div class="what">독도크루즈 출발 (사동항)</div><div class="note">편도 1시간 30분~2시간 · 사동항 귀항 10:30 전후 예정</div></div></li>
+    <li><span class="time">06:30</span><div><div class="what">독도크루즈 출발 (사동항)</div><div class="note">편도 1시간 30분~2시간</div></div></li>
+    <li><span class="time">10:30</span><div><div class="what">사동항 귀항</div><div class="note">예정 시각 · 예약 내역 확인</div></div></li>
+    <li><span class="time">이후</span><div><div class="what">다온프라임호텔 (저동) 짐 맡기기</div><div class="note">사동항에서 택시 약 20분 · 체크인 15:00 · 체크아웃 10:00</div><div class="jumps"><a href="#" data-goto="places" data-area="jeodong" data-cat="see">저동 근처 관광지</a><a href="#" data-goto="places" data-area="jeodong" data-cat="food">저동 근처 음식점</a><a href="#" data-goto="places" data-area="jeodong" data-cat="cafe">저동 근처 카페</a></div></div></li>
   </ol>
   <div class="info">
     <div class="label">참고</div>
     <ul>
       <li>독도는 기상에 따라 접안하지 않고 섬 주변을 선회할 수 있음</li>
-      <li>사동항 → 저동 숙소 택시 약 20분 · 체크인 전 짐 보관 가능</li>
       <li>관음도 · 삼선암 · 천부 해중전망대 · 카페 울라는 북쪽 해안 한 방향에 위치</li>
       <li>11월 관광지 입장마감 대부분 16:30 · 일몰 17:30 전후</li>
       <li>장소·식당·카페는 <a href="#" data-goto="places">장소 정보</a> 탭 참고</li>
@@ -186,6 +190,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; padding: 10px
   <div class="info">
     <div class="label">참고</div>
     <ul>
+      <li>호텔 체크아웃 10:00</li>
       <li>짐 보관: 도동항 여객선터미널 3층 짐보관소</li>
       <li>도동항 → 사동항 약 3km · 택시 이동</li>
       <li>선내 대식당 중식 12:00~14:00 · 편의점 11:30~18:00</li>
@@ -387,7 +392,15 @@ function show(t) {
   try { sessionStorage.setItem('tab', t); } catch (e) {}
 }
 tabBtns.forEach(b => b.addEventListener('click', () => show(b.dataset.t)));
-document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.goto); }));
+document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => {
+  e.preventDefault();
+  curArea = a.dataset.area || 'all';
+  curCat = a.dataset.cat || 'all';
+  filters.querySelectorAll('button').forEach(x => x.classList.toggle('active', x.dataset.f === curArea));
+  cats.querySelectorAll('button').forEach(x => x.classList.toggle('active', x.dataset.c === curCat));
+  render();
+  show(a.dataset.goto);
+}));
 try { const s = sessionStorage.getItem('tab'); if (s && document.getElementById(s)) show(s); } catch (e) {}
 </script>
 </body>
