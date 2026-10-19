@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="format-detection" content="telephone=no, address=no, email=no, date=no">
+<title>울릉도 여행 안내 (11/5~11/7)</title>
+<style>
+:root {
+  color-scheme: light only;
+  --bg: #FFFFFF;
+  --soft: #F6F8FA;
+  --ink: #1D2630;
+  --muted: #6A7682;
+  --line: #E8ECF0;
+  --brand: #0A6F8C;
+  --brand-soft: #E6F3F7;
+  --amber: #96600A;
+  --amber-soft: #FBF2DE;
+  --see: #0A6F8C;
+  --cafe: #B5781C;
+  --food: #B6503A;
+  --naver: #03C75A;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; -webkit-tap-highlight-color: transparent; }
+html { background: #FFFFFF; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: #FFFFFF; color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Malgun Gothic", sans-serif;
+  font-size: 15px; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: #FFFFFF; }
+a { color: var(--brand); }
+button { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100; background: #FFFFFF; border-bottom: 1px solid var(--line); }
+header { max-width: 720px; margin: 0 auto; padding: 18px 18px 6px; }
+header h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+header .sub { margin-top: 2px; font-size: 13px; color: var(--muted); }
+nav.tabs { max-width: 720px; margin: 0 auto; display: flex; padding: 0 8px; }
+nav.tabs button {
+  flex: 1 1 0; min-width: 0; padding: 12px 2px 10px; background: none; border: none;
+  border-bottom: 2.5px solid transparent; font-size: 14px; font-weight: 600; color: var(--muted);
+  cursor: pointer; white-space: nowrap; touch-action: manipulation;
+}
+nav.tabs button.active { color: var(--ink); border-bottom-color: var(--brand); }
+
+main { max-width: 720px; margin: 0 auto; padding: 0 18px 32px; }
+.section { display: none; padding-top: 20px; }
+.section.active { display: block; }
+.day-title { font-size: 19px; font-weight: 800; margin: 0; letter-spacing: -0.01em; }
+.day-sub { font-size: 13px; color: var(--muted); margin: 2px 0 16px; }
+h2 { font-size: 16px; font-weight: 800; margin: 28px 0 10px; }
+h2:first-child { margin-top: 0; }
+
+/* timeline */
+.tl { list-style: none; margin: 0; padding: 0; }
+.tl li { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.tl li:last-child { border-bottom: none; }
+.tl .time { font-weight: 800; color: var(--brand); font-variant-numeric: tabular-nums; font-size: 15px; }
+.tl .what { font-weight: 600; }
+.tl .note { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+.info { background: var(--soft); border-radius: 12px; padding: 14px 16px; margin-top: 18px; }
+.info .label { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.02em; margin-bottom: 6px; }
+.info ul { margin: 0; padding-left: 18px; }
+.info li { margin: 4px 0; font-size: 14px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 4px; background: var(--amber-soft); color: var(--amber); margin-left: 4px; vertical-align: 1px; }
+
+/* places */
+.filters { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 6px; margin-bottom: 8px; scrollbar-width: none; }
+.filters::-webkit-scrollbar { display: none; }
+.filters button {
+  flex: 0 0 auto; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line);
+  background: #FFFFFF; color: var(--ink); font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.filters button.active { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+.seg { display: flex; background: var(--soft); border-radius: 10px; padding: 3px; margin-bottom: 12px; }
+.seg button { flex: 1; border: none; background: transparent; padding: 8px 4px; border-radius: 8px; font-size: 14px; font-weight: 700; color: var(--muted); cursor: pointer; touch-action: manipulation; }
+.seg button.active { background: #FFFFFF; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.catnote { font-size: 12px; color: var(--muted); margin: 0 0 4px; min-height: 0; }
+.catnote:empty { display: none; }
+
+.area { padding: 18px 0 6px; border-top: 1px solid var(--line); margin-top: 10px; }
+.area:first-of-type { border-top: none; margin-top: 0; }
+.area-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.area-head .t { font-size: 17px; font-weight: 800; }
+.area-head a { font-size: 12px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.area-sub { font-size: 13px; color: var(--muted); margin: 2px 0 6px; }
+.glabel { font-size: 12px; font-weight: 800; color: var(--muted); margin: 14px 0 2px; letter-spacing: 0.02em; }
+.place { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.place:last-child { border-bottom: none; }
+.place .body { flex: 1; min-width: 0; }
+.place .name { font-weight: 700; }
+.place .d { font-size: 13px; color: var(--muted); margin-top: 1px; }
+.place .hl { font-size: 12px; color: var(--amber); font-weight: 700; margin-top: 2px; }
+.nmap {
+  flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 800; color: #FFFFFF; background: var(--naver);
+  padding: 6px 9px; border-radius: 6px; text-decoration: none; margin-top: 2px;
+}
+.empty { font-size: 13px; color: var(--muted); padding: 8px 0; }
+
+/* prep */
+.list { list-style: none; margin: 0; padding: 0; }
+.list li { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.list li:last-child { border-bottom: none; }
+.list b { display: block; font-size: 14px; margin-bottom: 1px; }
+.list .d { color: var(--muted); font-size: 13px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 9px 4px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; color: var(--muted); font-weight: 700; }
+td:first-child { white-space: nowrap; font-weight: 600; padding-right: 12px; }
+tr:last-child td { border-bottom: none; }
+.small { font-size: 12px; color: var(--muted); margin-top: 8px; }
+footer { font-size: 12px; color: var(--muted); text-align: center; padding: 10px 18px 30px; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <header>
+    <h1>울릉도 여행 안내</h1>
+    <div class="sub">11월 5일(목) ~ 7일(토) · 숙소 다온프라임호텔 (저동)</div>
+  </header>
+  <nav class="tabs" role="tablist">
+    <button class="active" data-t="d1">5일</button>
+    <button data-t="d2">6일</button>
+    <button data-t="d3">7일</button>
+    <button data-t="places">장소 정보</button>
+    <button data-t="prep">준비</button>
+  </nav>
+</div>
+
+<main>
+
+<section class="section active" id="d1">
+  <p class="day-title">11월 5일 목요일</p>
+  <p class="day-sub">출발</p>
+  <ol class="tl">
+    <li><span class="time">16:42</span><div><div class="what">수원역 → 경주역</div><div class="note">18:54 도착 · 경주역 합류</div></div></li>
+    <li><span class="time">23:00</span><div><div class="what">울릉크루즈 출항</div><div class="note">포항 영일만항 → 11/6 06:00 울릉 사동항</div></div></li>
+  </ol>
+  <div class="info">
+    <div class="label">참고</div>
+    <ul>
+      <li>경주 저녁 식사 후 자차로 포항 영일만항 이동</li>
+      <li>선내 편의점 22:00~00:40 · 레이저쇼 23:00~23:10 (5층 야외갑판)</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="d2">
+  <p class="day-title">11월 6일 금요일</p>
+  <p class="day-sub">독도 · 울릉도 자유 일정</p>
+  <ol class="tl">
+    <li><span class="time">06:00</span><div><div class="what">사동항 도착</div></div></li>
+    <li><span class="time">06:30</span><div><div class="what">독도크루즈 출발 (사동항)</div><div class="note">편도 1시간 30분~2시간 · 사동항 귀항 10:30 전후 예정</div></div></li>
+  </ol>
+  <div class="info">
+    <div class="label">참고</div>
+    <ul>
+      <li>독도는 기상에 따라 접안하지 않고 섬 주변을 선회할 수 있음</li>
+      <li>사동항 → 저동 숙소 택시 약 20분 · 체크인 전 짐 보관 가능</li>
+      <li>관음도 · 삼선암 · 천부 해중전망대 · 카페 울라는 북쪽 해안 한 방향에 위치</li>
+      <li>11월 관광지 입장마감 대부분 16:30 · 일몰 17:30 전후</li>
+      <li>장소·식당·카페는 <a href="#" data-goto="places">장소 정보</a> 탭 참고</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="d3">
+  <p class="day-title">11월 7일 토요일</p>
+  <p class="day-sub">유람선 · 귀가</p>
+  <ol class="tl">
+    <li><span class="time">08:40</span><div><div class="what">도동항 유람선</div><div class="note">10:40 도착</div></div></li>
+    <li><span class="time">12:00</span><div><div class="what">울릉크루즈 출항 (사동항)</div><div class="note">18:30 포항 영일만항 도착</div></div></li>
+    <li><span class="time">19:38</span><div><div class="what">포항역 → 21:03 대전역</div></div></li>
+    <li><span class="time">21:19</span><div><div class="what">대전역 → 22:26 수원역</div></div></li>
+  </ol>
+  <div class="info">
+    <div class="label">참고</div>
+    <ul>
+      <li>짐 보관: 도동항 여객선터미널 3층 짐보관소</li>
+      <li>도동항 → 사동항 약 3km · 택시 이동</li>
+      <li>선내 대식당 중식 12:00~14:00 · 편의점 11:30~18:00</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="places">
+  <div class="seg" id="cats" role="tablist">
+    <button class="active" data-c="all">전체</button>
+    <button data-c="see">볼거리</button>
+    <button data-c="cafe">카페</button>
+    <button data-c="food">식당</button>
+  </div>
+  <div class="filters" id="filters"></div>
+  <p class="catnote" id="catnote"></p>
+  <div id="areaList"></div>
+</section>
+
+<section class="section" id="prep">
+  <h2>여행 시 주의사항</h2>
+  <ul class="list">
+    <li><b>배 결항 가능성</b><span class="d">기상 악화 시 여객선·독도크루즈·유람선 결항 또는 시간 변경. 출발 전 문자·앱 안내 확인</span></li>
+    <li><b>신분증 지참</b><span class="d">여객선 승선 시 본인 확인</span></li>
+    <li><b>입장마감 16:30</b><span class="d">천부 해중전망대·태하 모노레일 등 11월 관광지 대부분</span></li>
+    <li><b>강한 바람</b><span class="d">관음도 연도교·해안산책로·전망대는 기상에 따라 통제 가능</span></li>
+    <li><b>식당 주문</b><span class="d">2인분 이상 주문 메뉴가 많음 · 저녁 일찍 마감하는 식당 있음</span></li>
+    <li><b>일몰 17:30 전후</b><span class="d">해안·산길 이동은 해 지기 전 마무리</span></li>
+  </ul>
+
+  <h2>있으면 좋은 준비물</h2>
+  <ul class="list">
+    <li><b>멀미약</b><span class="d">독도크루즈·유람선은 대형 여객선보다 흔들림이 큼</span></li>
+    <li><b>바람막이·겉옷</b><span class="d">11월 해안·선상은 체감온도가 낮음</span></li>
+    <li><b>편한 운동화</b><span class="d">관음도·전망대 산책로 오르막</span></li>
+    <li><b>보조배터리</b><span class="d">밤배 이동 · 지도 사용</span></li>
+    <li><b>세면도구·슬리퍼</b><span class="d">밤배 객실 이용 시</span></li>
+  </ul>
+
+  <h2>울릉알리미 앱</h2>
+  <ul class="list">
+    <li><b>울릉군 공식 알림 앱</b><span class="d">여객선 운항·도착시간 · 일주도로 통제 · 공영버스 변경 · 기상특보 푸시 알림</span>
+      <div style="margin-top:6px;display:flex;gap:8px"><a href="https://apps.apple.com/kr/app/id1265493039" target="_blank" rel="noopener">아이폰</a><a href="https://play.google.com/store/apps/details?id=kr.go.ulleung.app.infoalimy" target="_blank" rel="noopener">안드로이드</a></div></li>
+  </ul>
+
+  <h2>울릉크루즈 시설</h2>
+  <table>
+    <tr><th>시설</th><th>위치 · 이용시간</th></tr>
+    <tr><td>편의점</td><td>5층 · 포항 출발 22:00~00:40 · 울릉 출발 11:30~18:00</td></tr>
+    <tr><td>대식당</td><td>5층 · 울릉 출발 중식 12:00~14:00, 석식 16:30~18:30</td></tr>
+    <tr><td>카페 · 베이커리</td><td>5층 · 호박빵 판매</td></tr>
+    <tr><td>오션뷰 라운지 카페</td><td>8층</td></tr>
+    <tr><td>코인노래방</td><td>5층 · 상시 운영</td></tr>
+    <tr><td>노래방</td><td>5층 · 예약제</td></tr>
+    <tr><td>레이저쇼</td><td>5층 야외갑판 · 23:00~23:10</td></tr>
+    <tr><td>공용 화장실·세면장</td><td>7층</td></tr>
+    <tr><td>객실</td><td>2·4·6인실 침실형 · 객실 내 화장실</td></tr>
+  </table>
+  <p class="small">울릉크루즈 공식 홈페이지 기준 · 운영시간은 선내 상황에 따라 변경 가능</p>
+</section>
+
+<footer>영업시간·요금은 2026년 10월 확인 기준이며 변경될 수 있습니다.</footer>
+</main>
+
+<script>
+const NMAP = q => 'https://map.naver.com/p/search/' + encodeURIComponent('울릉 ' + q);
+
+// [이름, 설명, 강조(선택), 검색어]
+const AREAS = [
+  { id: 'jeodong', name: '저동', map: '저동항', sub: '숙소 주변 · 저동항 식당골목',
+    see: [
+      ['촛대바위 · 저동항', '방파제 끝 바위 · 저녁 오징어배 불빛', '', '저동 촛대바위'],
+      ['행남해안산책로', '도동항 ↔ 저동 촛대바위 3.8km 해안길', '기상 악화 시 통제', '행남해안산책로'],
+      ['내수전 일출전망대', '저동항·도동항 조망', '', '내수전 일출전망대'],
+      ['봉래폭포', '숲길 끝 폭포 · 입장료 있음', '', '봉래폭포'],
+      ['다온프라임호텔 옥상', '8층 · 바다 전망', '', '다온프라임호텔']
+    ],
+    cafe: [
+      ['저동커피', '저동항 선착장 앞 · 먹물·호박 아이스크림 · 기념품', '', '저동커피'],
+      ['글림', '저동 식당골목 인근 · 조용한 실내 · 소파 좌석', '', '글림 카페']
+    ],
+    food: [
+      ['명가식당', '홍합밥 · 따개비밥 · 따개비칼국수 15,000 · 오징어내장탕 18,000', '06:50~20:30 · 브레이크 15:00~16:30', '명가식당'],
+      ['정애분식', '따개비칼국수 15,000 · 홍합밥 20,000 · 오징어내장탕 18,000', '07:00~20:00', '정애분식'],
+      ['아리랑식당', '오삼불고기 20,000 · 홍따밥+명이나물 22,000 · 오징어내장탕 18,000', '', '아리랑식당 울릉'],
+      ['동백식당', '따개비칼국수 13,000 · 오삼불고기 20,000 · 홍따밥 20,000 (2인 이상)', '07:00~21:00', '동백식당 울릉']
+    ]
+  },
+  { id: 'north', name: '북쪽 해안', map: '천부리', sub: '관음도 · 삼선암 · 천부 · 추산',
+    see: [
+      ['관음도', '보행 연도교로 연결된 섬 · 산책 약 1시간', '11월 주간 운영', '관음도'],
+      ['삼선암', '바다 위 세 바위 · 정차 후 감상', '', '삼선암'],
+      ['천부 해중전망대', '국내 유일 수중 전망대 · 일반 4,000원', '09:00~17:00 · 입장마감 16:30', '천부해중전망대'],
+      ['추산 몽돌해변 · 송곳산', '카페 울라 인근', '', '추산 몽돌해변']
+    ],
+    cafe: [
+      ['카페 울라', '송곳산·바다 전망 · 정원 포토존 · 울라치노 8,000', '10:00~17:30 · 비수기 변동', '카페울라']
+    ],
+    food: []
+  },
+  { id: 'nari', name: '나리분지', map: '나리분지', sub: '섬 중앙 화산 분지',
+    see: [
+      ['나리분지 너와집 · 투막집', '울릉도 전통 가옥', '', '나리분지'],
+      ['소품샵 소울', '소품·기념품', '', '나리분지 소울']
+    ],
+    cafe: [
+      ['숲크닉커피', '잔디밭 · 야외좌석 · 구움과자 · 오디주스', '', '숲크닉커피']
+    ],
+    food: [
+      ['나리촌식당', '산채비빔밥 · 산채정식 · 나물 반찬', '', '나리촌식당']
+    ]
+  },
+  { id: 'west', name: '서쪽 해안', map: '태하리', sub: '태하 · 현포 · 남양 · 통구미',
+    see: [
+      ['태하 모노레일 · 대풍감', '어른 4,000원 · 상부에서 태하등대까지 도보 약 10분 · 상부 화장실 없음', '08:00~18:00 · 입장마감 16:30', '태하향목관광모노레일'],
+      ['현포 코끼리바위 (공암)', '울릉도 3대 해상 비경', '', '코끼리바위'],
+      ['남양 사자바위 · 국수바위', '서쪽 해안 기암', '', '남양 사자바위'],
+      ['통구미 거북바위', '해안 기암', '', '통구미 거북바위']
+    ],
+    cafe: [
+      ['카페 래우', '태하 · 모노레일 가는 길 · 독도새우빵 · 와플', '', '카페래우'],
+      ['더이스트', '통구미 · 거북바위 전망 통창 · 야외테라스', '', '더이스트 울릉']
+    ],
+    food: [
+      ['현포거기맛집', '돌판돼지두루치기 15,000 · 돼지찌개 · 전 · 따개비밥 (2인 이상)', '07:00 오픈', '현포거기맛집']
+    ]
+  },
+  { id: 'dodong', name: '도동', map: '도동항', sub: '울릉도 중심가 · 저동에서 택시 약 10분',
+    see: [
+      ['독도전망대 케이블카', '2026년 5월 운행 재개 · 독도박물관 인근', '', '독도전망대케이블카'],
+      ['행남해안산책로 입구', '도동항 방파제', '', '행남해안산책로'],
+      ['도동항 여객선터미널', '3층 짐보관소 · 유람선 승선', '', '도동항여객선터미널']
+    ],
+    cafe: [
+      ['카페 만디', '도동항 인근', '', '카페만디'],
+      ['카페 1025', '도동공영주차장 뒤 · 독도 소품', '', '카페 1025 울릉']
+    ],
+    food: [
+      ['다애식당', '따개비밥 · 홍합밥 · 오징어내장탕', '07:00~20:00', '다애식당'],
+      ['두꺼비식당', '홍합밥 · 따개비밥 · 엉겅퀴해장국 · 여객선터미널 인근', '~20:00', '두꺼비식당'],
+      ['박가네따개비', '따개비칼국수 · 따개비죽', '', '박가네따개비'],
+      ['돼지식당', '홍따밥 · 맑은 오징어내장탕', '', '돼지식당 울릉'],
+      ['향토맛집', '울릉약소구이 35,000 · 오삼불고기 18,000 · 홍합밥', '10:30~21:00', '향토맛집 도동']
+    ]
+  },
+  { id: 'sadong', name: '사동', map: '사동항', sub: '울릉크루즈 · 독도크루즈 항구',
+    see: [
+      ['사동항 여객선터미널', '울릉크루즈 · 독도크루즈 승선', '', '사동항여객터미널']
+    ],
+    cafe: [], food: []
+  }
+];
+
+const CAT_LABEL = { see: '볼거리', cafe: '카페', food: '식당' };
+const CAT_NOTE = { food: '친절 후기가 확인된 식당만 수록', all: '', see: '', cafe: '' };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let curCat = 'all', curArea = 'all';
+
+function rows(list) {
+  return list.map(([n, d, h, q]) => `<div class="place"><div class="body"><div class="name">${esc(n)}</div><div class="d">${esc(d)}</div>${h ? `<div class="hl">${esc(h)}</div>` : ''}</div><a class="nmap" href="${NMAP(q)}" target="_blank" rel="noopener">N 지도</a></div>`).join('');
+}
+
+function render() {
+  const cats = curCat === 'all' ? ['see', 'cafe', 'food'] : [curCat];
+  const html = AREAS.filter(a => curArea === 'all' || a.id === curArea).map(a => {
+    const parts = cats.filter(c => a[c].length).map(c =>
+      (curCat === 'all' ? `<div class="glabel">${CAT_LABEL[c]}</div>` : '') + rows(a[c]));
+    if (!parts.length) return '';
+    return `<div class="area">
+      <div class="area-head"><span class="t">${esc(a.name)}</span><a href="${NMAP(a.map)}" target="_blank" rel="noopener">주변 지도 →</a></div>
+      <div class="area-sub">${esc(a.sub)}</div>${parts.join('')}</div>`;
+  }).join('');
+  document.getElementById('areaList').innerHTML = html || '<p class="empty">이 지역에 해당 항목이 없습니다.</p>';
+  document.getElementById('catnote').textContent = CAT_NOTE[curCat];
+}
+
+const filters = document.getElementById('filters');
+filters.innerHTML = '<button class="active" data-f="all">전체 지역</button>' + AREAS.map(a => `<button data-f="${a.id}">${esc(a.name)}</button>`).join('');
+filters.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  curArea = b.dataset.f;
+  filters.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+  render();
+});
+const cats = document.getElementById('cats');
+cats.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  curCat = b.dataset.c;
+  cats.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
+  render();
+});
+render();
+
+const tabBtns = document.querySelectorAll('nav.tabs button');
+function show(t) {
+  tabBtns.forEach(b => b.classList.toggle('active', b.dataset.t === t));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === t));
+  window.scrollTo(0, 0);
+  try { sessionStorage.setItem('tab', t); } catch (e) {}
+}
+tabBtns.forEach(b => b.addEventListener('click', () => show(b.dataset.t)));
+document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.goto); }));
+try { const s = sessionStorage.getItem('tab'); if (s && document.getElementById(s)) show(s); } catch (e) {}
+</script>
+</body>
+</html>
